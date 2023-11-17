@@ -1,60 +1,62 @@
 <?php
 
-  $page = "admin_login";
+$page = "admin_login";
 
-  $err = "";
+$err = "";
 
-  session_start();
+session_start();
 
-  if (isset($_SESSION['admin_id'])) {
+if (isset($_SESSION['admin_id'])) {
     session_destroy();
-  }
-  else {
+} else {
     if (isset($_POST['submitted'])) {
-      $dbc = mysqli_connect('localhost', 'root', '');
-      mysqli_select_db($dbc, 'in_haus');
-      
-      $admin_email = $_POST['email'];
-      $admin_password = md5($_POST['password']);
-  
-      $query = "SELECT * FROM user 
-                WHERE email = '$admin_email' 
-                AND password = '$admin_password' 
-                AND access_level != 'Normal User'";
-  
-      $r = mysqli_query($dbc, $query);
-      $row = mysqli_fetch_assoc($r);
-  
-      if (isset($row)) {
-        $_SESSION['admin_id'] = $row['user_id'];
-        $_SESSION['admin_name'] = $row['name'];
-        $_SESSION['admin_email'] = $row['email'];
-        $_SESSION['admin_position'] = $row['access_level'];
+        // Validate and sanitize user input
+        $admin_email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $admin_password = $_POST['password']; // No need to sanitize password for SQL queries
 
-        if ($_SESSION['admin_position'] == "Customer Service")
-          header("Location: users.php");
-        else
-          header("Location: dashboard.php");
-      }
-      else {
-        $query = "SELECT * FROM user 
-                  WHERE email = '$admin_email'  
-                  AND access_level != 'Normal User'";
+        if (!filter_var($admin_email, FILTER_VALIDATE_EMAIL)) {
+            $err = "Invalid email format";
+        } else {
+            $dbc = mysqli_connect('localhost', 'root', '');
+            mysqli_select_db($dbc, 'in_haus');
 
-        $r = mysqli_query($dbc, $query);
-        $row = mysqli_fetch_assoc($r);
+            // Use prepared statements to prevent SQL injection
+            $query = "SELECT * FROM user 
+                        WHERE email = ? 
+                        AND access_level != 'Normal User'";
 
-        if (isset($row))
-          $err = "The e-mail or password that you've entered is incorrect. Please try again.";
-        else
-          $err = "The e-mail that you've entered does not match any account.";
-      }
-  
-      mysqli_close($dbc);
+            $stmt = mysqli_prepare($dbc, $query);
+            mysqli_stmt_bind_param($stmt, "s", $admin_email);
+            mysqli_stmt_execute($stmt);
+            $r = mysqli_stmt_get_result($stmt);
+
+            if ($row = mysqli_fetch_assoc($r)) {
+                // Use password_verify to check if the entered password matches the stored hashed password
+                if (password_verify($admin_password, $row['password'])) {
+                    $_SESSION['admin_id'] = $row['user_id'];
+                    $_SESSION['admin_name'] = $row['name'];
+                    $_SESSION['admin_email'] = $row['email'];
+                    $_SESSION['admin_position'] = $row['access_level'];
+
+                    if ($_SESSION['admin_position'] == "Customer Service") {
+                        header("Location: users.php");
+                    } else {
+                        header("Location: dashboard.php");
+                    }
+                } else {
+                    $err = "The e-mail or password that you've entered is incorrect. Please try again.";
+                }
+            } else {
+                $err = "$admin_email - This email does not exist!";
+            }
+
+            mysqli_close($dbc);
+        }
     }
-  }
+}
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -98,7 +100,8 @@
 
               <div class="card-body">
                 <form method="POST" action="login.php" class="needs-validation" novalidate="">
-                  <div class="text-danger pb-3"><?php echo $err; ?></div>
+                  <!-- Use htmlspecialchars to escape special characters in the error message -->
+                  <div class="text-danger pb-3"><?php echo htmlspecialchars($err); ?></div>
                   <div class="form-group">
                     <label for="email">Email</label>
                     <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>

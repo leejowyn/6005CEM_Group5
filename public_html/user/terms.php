@@ -60,15 +60,16 @@
                     <h2 class="accordion-header" id="flush-headingOne">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                            Interactive Training Modules
+                            Strong Passwords
                         </button>
                     </h2>
                     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             <ul>
-                                <li>Develop interactive modules/videos for recognizing phishing attempts.</li>
-                                <li>Include examples of phishing emails and websites, highlighting common tactics.</li>
+                                <li>Encourage users to create strong, unique passwords for their accounts.</li>
+                                <li>Emphasize the use of a combination of uppercase and lowercase letters, numbers, and special characters.</li>
+                                <li>Suggest the use of password manager tools to generate and store complex passwords securely.</li>
                             </ul>
                         </div>
                     </div>
@@ -77,15 +78,15 @@
                     <h2 class="accordion-header" id="flush-headingTwo">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                            Email Alerts and Reminders
+                            Two-Factor Authentication (2FA)
                         </button>
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             <ul>
-                                <li>Periodically send alerts about staying vigilant against phishing.</li>
-                                <li>Include practical tips and examples in the emails.</li>
+                                <li>Promote the use of two-factor authentication to add an extra layer of security to user accounts.</li>
+                                <li>Explain how 2FA can help protect accounts even if passwords are compromised.</li>
                             </ul>
                         </div>
                     </div>
@@ -95,15 +96,15 @@
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseThree" aria-expanded="false"
                             aria-controls="flush-collapseThree">
-                            In-App Pop-ups or Notifications
+                            Regular Password Updates
                         </button>
                     </h2>
                     <div id="flush-collapseThree" class="accordion-collapse collapse"
                         aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             <ul>
-                                <li>Implement pop-ups with quick tips on recognizing phishing attempts.</li>
-                                <li>Make these notifications visible during login and relevant interactions.</li>
+                                <li>Encourage users to update their passwords regularly to reduce the risk of unauthorized access.</li>
+                                <li>Provide reminders or notifications for users to change their passwords at predefined intervals.</li>
                             </ul>
                         </div>
                     </div>
@@ -114,15 +115,69 @@
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseFive" aria-expanded="false"
                             aria-controls="flush-collapseFive">
-                            Security Awareness Campaigns
+                            Secure Connection Practices
                         </button>
                     </h2>
                     <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             <ul>
-                                <li>Launch campaigns on various cybersecurity threats, including phishing</li>
-                                <li>Utilize posters, newsletters, and other channels to reinforce key messages.</li>
+                                <li>Advise users to access the application only through secure and trusted networks.</li>
+                                <li>Highlight the importance of using HTTPS to encrypt data transmitted between the user's device and the application server.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingSix">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                            Phishing Awareness
+                        </button>
+                    </h2>
+                    <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingSix"
+                        data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Educate users on how to recognize phishing attempts, such as suspicious emails or fake websites.</li>
+                                <li>Provide examples of common phishing tactics and advise users to verify the authenticity of requests for sensitive information.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingSeven">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseSeven" aria-expanded="false"
+                            aria-controls="flush-collapseSeven">
+                            Logout After Sessions
+                        </button>
+                    </h2>
+                    <div id="flush-collapseSeven" class="accordion-collapse collapse"
+                        aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Emphasize the importance of logging out of their accounts, especially on shared or public computers.</li>
+                                <li>Implement automatic session timeouts to enhance security when users forget to log out.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingEight">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseEight" aria-expanded="false"
+                            aria-controls="flush-collapseEight">
+                            Device Security
+                        </button>
+                    </h2>
+                    <div id="flush-collapseEight" class="accordion-collapse collapse"
+                        aria-labelledby="flush-headingEight" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <ul>
+                                <li>Encourage users to secure their devices with passwords or biometric authentication.</li>
+                                <li>Remind them to install regular software updates and security patches for their operating systems and applications.</li>
                             </ul>
                         </div>
                     </div>

@@ -5,8 +5,7 @@ if(!isset($_SESSION['user_id'])){
   header("location: login.php");
 }
 ?>
-
-<!-- Price box minimal--><!DOCTYPE html>
+<!DOCTYPE html>
 <html class="wide wow-animation" lang="en">
   <head>
     <title>Save Form</title>
@@ -27,7 +26,6 @@ if(!isset($_SESSION['user_id'])){
         </symbol>
       </defs>
     </svg>
-
     <style>
     .ie-panel{display: none;
       background: #212121;
@@ -44,65 +42,57 @@ if(!isset($_SESSION['user_id'])){
         text-size-adjust: 20dp;
       }
     </style>
-
-
 </head>
 <body>
 <?php
-    if(
+
+if (
     !empty($_POST['preferred_style']) &&
     !empty($_POST['consulType']) &&
     !empty($_POST['comment']) &&
     !empty($_POST['date']) &&
     !empty($_POST['time']) &&
-    !empty($_POST['area'])){
-
-   $custID = $_SESSION['user_id'];
+    !empty($_POST['area'])
+) {
+    $custID = $_SESSION['user_id'];
     $course = implode(',', $_POST['preferred_style']);
     $type = $_POST['consulType'];
     $comment = $_POST['comment'];
     $date = $_POST['date'];
     $time = $_POST['time'];
     $area = $_POST['area'];
-    $currentdate =  date("Y-m-d");
-    $var=NULL;
+    $currentdate = date("Y-m-d");
 
-    
-            
-    $queryInsert = mysqli_query($conn, "INSERT INTO consultation(consultation_id, created_datetime, 
-        consultation_date, consultation_time, consultation_type, preferred_style, design_range, 
+    try {
+        $queryInsert = mysqli_query($conn, "INSERT INTO consultation(consultation_id, created_datetime, 
+        last_modified_datetime, consultation_status, consultation_date, consultation_time, consultation_type, preferred_style, design_range, 
          consultation_remark, cust_id)
-                        VALUES (0, '$currentdate', '$date', '$time', '$type',' $course','$area','$comment','$custID')");
-            
-       
+        VALUES (0, '$currentdate', DEFAULT, 'Pending', '$date', '$time', '$type',' $course','$area','$comment','$custID')");
+
+        if ($queryInsert) {
             echo '<div class="container test">';
             echo ' <div class="success-block">';
             echo '<svg class="icon success-icon" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">';
             echo '<use xlink:href="#check"></use>';
             echo '</svg>';
             echo '<div class="title"><span>S</span><span>u</span><span>c</span><span>c</span><span>e</span><span>s</span><span>s</span>';
-            echo '<br><p style="font-size:2vw">Successfully place an appointment! please click the link below back to homepage</p>';
-            echo '<a href="index.php" style="font-size:2vw">Home Page </a>';
-            echo '</div>';
-              
+            echo '<br><p style="font-size:2vw">Successfully placed an appointment! Please click the link below to go back to the homepage.</p>';
+            echo '<a href="index.php" style="font-size:2vw">Home Page</a>';
             echo '</div>';
             echo '</div>';
-             
-            echo '<div class="container test">';
-            echo ' <div class="success-block">';
-            
             echo '</div>';
-            echo '</div>';
-  
+        } else {
+            throw new Exception(mysqli_error($conn));
+        }
+    } catch (Exception $e) {
+        echo 'Error: ' . $e->getMessage();
+    }
 
-   }else{
-   echo "Please fill in all the information to place an appointment! ";
-   }
-
-   mysqli_close($conn);
-
-
-
+    mysqli_close($conn);
+} else {
+    echo "Please fill in all the information to place an appointment!";
+}
 ?>
+
 </body>
 </html>
