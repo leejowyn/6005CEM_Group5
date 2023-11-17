@@ -1,10 +1,10 @@
 # 6005CEM_Group5
 
 Members : 
-Teoh Wei Jie 
-Lee Jowyn
-Cheng Xin Ye 
-Tan Zhen Kwang 
+Teoh Wei Jie,
+Lee Jowyn,
+Cheng Xin Ye, 
+Tan Zhen Kwang, 
 Gan Kah Xiang 
 
 # InHausInteriorWebsite
