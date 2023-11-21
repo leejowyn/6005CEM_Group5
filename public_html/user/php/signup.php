@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             if ($stmt->affected_rows > 0) {
                                 $_SESSION['user_id'] = $stmt->insert_id;
+                                
                                 echo htmlspecialchars("success");
                             } else {
                                 echo htmlspecialchars("Something went wrong. Please try again!");
