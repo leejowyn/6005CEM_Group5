@@ -1,5 +1,7 @@
 <?php
 
+	include 'permissions.php';
+
 	function validateImage($image_type, $isSingle) {
 		$err = "";
 
@@ -19,6 +21,9 @@
 
 	$page = "portfolios";
 	session_start();
+
+	if (!hasPermission($_SESSION['admin_position'], 'update_portfolio'))
+    	redirect403();
 
 	$dbc = mysqli_connect('localhost', 'root', '');
 	mysqli_select_db($dbc, 'in_haus');
@@ -200,6 +205,20 @@
 
 	}
 
+	// delete portfolio record 
+	if (isset($_POST['portfolio_id']) && isset($_POST['delete'])) {
+		$portfolio_id = $_POST['portfolio_id'];
+	
+		$query = "DELETE FROM portfolio WHERE portfolio_id = $portfolio_id";
+		if (mysqli_query($dbc, $query)) {
+			header('Location: portfolios.php');
+		}
+		else {
+			$fail_alert = "Could not delere the portfolio because: <br/>" . mysqli_error($dbc) . "The query was: " . $query;
+		}
+
+	}
+
 	mysqli_close($dbc);
 ?>
 <!DOCTYPE html>
@@ -247,186 +266,192 @@
 
           <div class="section-body">
             <div class="row">
-              <div class="col-12 col-md-6 col-lg-6">
-				<form action="<?php echo $url; ?>" method="post" enctype="multipart/form-data">
-					<div class="card">
-						<?php if (!empty($success_alert)): ?>
-						<div class="alert alert-success alert-dismissible show fade">
-							<div class="alert-body">
-								<button class="close" data-dismiss="alert">
-									<span>×</span>
-								</button>
-								<?php echo $success_alert; ?>
-							</div>
-						</div>
-						<?php endif; ?>
-						<?php if (!empty($fail_alert)): ?>
-						<div class="alert alert-danger alert-dismissible show fade">
-							<div class="alert-body">
-								<button class="close" data-dismiss="alert">
-									<span>×</span>
-								</button>
-								<?php echo $fail_alert; ?>
-							</div>
-						</div>
-						<?php endif; ?>
-						<div class="card-header">
-							<?php if (!empty($portfolio_id)): ?>
-							<button type="submit" class="btn btn-icon icon-left btn-primary mr-2"><i class="fas fa-check"></i> Save Changes</button> 
-							<input type="hidden" name="updated" value="true">
-							<?php else: ?>
-							<button type="submit" class="btn btn-icon icon-left btn-primary mr-2"><i class="fas fa-check"></i> Save</button> 
-							<input type="hidden" name="submitted" value="true">
-							<?php endif; ?>
-							<a href="portfolios.php" class="btn btn-icon icon-left btn-danger"><i class="fas fa-times"></i> Close</a>
-						</div>
-						
-						<div class="card-body">
-						<?php if (!empty($portfolio_id)): ?>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">ID</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" value="<?php echo $portfolio_id; ?>" disabled>
-							</div>
-						</div>
-						<?php endif; ?>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Category</label>
-							<div class="col-sm-9 selectgroup selectgroup-pills">
-								<?php 
-									$category_arr = array("Residential", "Commercial");
-
-									if (empty($category))
-										$category = $category_arr[0];
-
-									foreach ($category_arr as $c) {
-										if ($c == $category) {
-											echo
-											'<label class="selectgroup-item">
-												<input type="radio" name="category" value="' .  $c . '" class="selectgroup-input" checked>
-												<span class="selectgroup-button">' . $c . '</span>
-											</label>';
-										}
-										else {
-											echo
-											'<label class="selectgroup-item">
-												<input type="radio" name="category" value="' .  $c . '" class="selectgroup-input">
-												<span class="selectgroup-button">' . $c . '</span>
-											</label>';
-										}
-									}
-								?>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Style</label>
-							<div class="col-sm-9 selectgroup selectgroup-pills">
-								<?php 
-									$style_arr = array("Modern Minimalist", "Industrial Style", "Traditional / Classic Style", "Art Deco Style", 
-														"English Country Style", "Coastal Style", "Eclectic Style", "Asian / Zen Style", "Rustic Style", "Hi-Tech Style");
-
-									if (empty($style))
-										$style = $style_arr[0];
-
-									foreach ($style_arr as $s) {
-										if ($s == $style) {
-											echo
-											'<label class="selectgroup-item">
-												<input type="radio" name="style" value="' .  $s . '" class="selectgroup-input" checked>
-												<span class="selectgroup-button">' . $s . '</span>
-											</label>';
-										}
-										else {
-											echo
-											'<label class="selectgroup-item">
-												<input type="radio" name="style" value="' .  $s . '" class="selectgroup-input">
-												<span class="selectgroup-button">' . $s . '</span>
-											</label>';
-										}
-									}
-								?>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Description</label>
-							<div class="col-sm-9">
-								<textarea class="form-control" name="description" cols="30" rows="10" required><?php echo $description; ?></textarea>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Thumbnail</label>
-							<?php if (!empty($portfolio_id)): ?>
-							<div class="col-sm-3">
-								<div class="gallery gallery-fw" data-item-height="100">
-									<div class="gallery-item" data-image="assets/img/<?php echo empty($thumbnail_path) ? 'news/img09.jpg' : $thumbnail_path; ?>" data-title="" href="assets/img/<?php echo empty($thumbnail_path) ? 'news/img09.jpg' : $thumbnail_path; ?>" title="" style="height: 100px; background-image: url(&quot;assets/img/<?php echo empty($thumbnail_path) ? 'news/img09.jpg' : $thumbnail_path; ?>&quot;);"></div>
+				<div class="col-12 col-md-6 col-lg-6">
+					<form action="<?php echo $url; ?>" method="post" enctype="multipart/form-data">
+						<div class="card">
+							<?php if (!empty($success_alert)): ?>
+							<div class="alert alert-success alert-dismissible show fade">
+								<div class="alert-body">
+									<button class="close" data-dismiss="alert">
+										<span>×</span>
+									</button>
+									<?php echo $success_alert; ?>
 								</div>
 							</div>
 							<?php endif; ?>
-							<div class="<?php echo empty($portfolio_id) ? "col-sm-9" : "col-sm-5 ml-4"; ?> custom-file">
-								<input type="file" name="thumbnail" class="custom-file-input" id="thumbnail" <?php echo empty($portfolio_id) ? "required" : ""; ?> onchange="changeFileLabel(this.id)">
-								<label class="custom-file-label" for="thumbnail">Choose file</label>
-								<div class="text-danger pt-3"><?php echo $thumbnailErr; ?></div>
-							</div>
-						</div>
-						<div class="form-group row pt-3">
-							<label class="col-sm-3 col-form-label">Panorama</label>
-							<?php if (!empty($portfolio_id)): ?>
-							<div class="col-sm-3">
-								<div class="gallery gallery-fw" data-item-height="100">
-									<div class="gallery-item" data-image="assets/img/<?php echo empty($panorama_path) ? 'news/img09.jpg' : $panorama_path; ?>" data-title="" href="assets/img/<?php echo empty($panorama_path) ? 'news/img09.jpg' : $panorama_path; ?>" title="" style="height: 100px; background-image: url(&quot;assets/img/<?php echo empty($panorama_path) ? 'news/img09.jpg' : $panorama_path; ?>&quot;);"></div>
+							<?php if (!empty($fail_alert)): ?>
+							<div class="alert alert-danger alert-dismissible show fade">
+								<div class="alert-body">
+									<button class="close" data-dismiss="alert">
+										<span>×</span>
+									</button>
+									<?php echo $fail_alert; ?>
 								</div>
 							</div>
 							<?php endif; ?>
-							<div class="<?php echo empty($portfolio_id) ? "col-sm-9" : "col-sm-5 ml-4"; ?> custom-file">
-								<input type="file" name="panorama" class="custom-file-input" id="panorama" <?php echo empty($portfolio_id) ? "required" : ""; ?> onchange="changeFileLabel(this.id)">
-								<label class="custom-file-label" for="panorama">Choose file</label>
-								<div class="text-danger pt-3"><?php echo $panoramaErr; ?></div>
+							<div class="card-header">
+								<?php if (!empty($portfolio_id)): ?>
+								<button type="submit" class="btn btn-icon icon-left btn-primary mr-2"><i class="fas fa-check"></i> Save Changes</button> 
+								<input type="hidden" name="updated" value="true">
+								<?php else: ?>
+								<button type="submit" class="btn btn-icon icon-left btn-primary mr-2"><i class="fas fa-check"></i> Save</button> 
+								<input type="hidden" name="submitted" value="true">
+								<?php endif; ?>
+								<a href="portfolios.php" class="btn btn-icon icon-left btn-danger"><i class="fas fa-times"></i> Close</a>
 							</div>
-						</div>
-						<div class="form-group row pt-3">
-							<label class="col-sm-3 col-form-label">Images</label>
+							
+							<div class="card-body">
 							<?php if (!empty($portfolio_id)): ?>
-							<div class="col-sm-9">
-								<div class="form-group row">
-									<div class="row gutters-sm">
-									<?php foreach ($images_path as $img_path): ?>
-									<div class="col-6 col-sm-4">
-										<label class="imagecheck mb-4">
-										<input name="imagecheck[]" type="checkbox" value="<?php echo $img_path; ?>" class="imagecheck-input" onchange="checkImagesField(this)" checked="">
-										<figure class="imagecheck-figure">
-											<img src="assets/img/<?php echo $img_path; ?>" alt="" class="imagecheck-image">
-										</figure>
-										</label>
-									</div>
-									<?php endforeach; ?>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">ID</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" value="<?php echo $portfolio_id; ?>" disabled>
+								</div>
+							</div>
+							<?php endif; ?>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">Category</label>
+								<div class="col-sm-9 selectgroup selectgroup-pills">
+									<?php 
+										$category_arr = array("Residential", "Commercial");
+
+										if (empty($category))
+											$category = $category_arr[0];
+
+										foreach ($category_arr as $c) {
+											if ($c == $category) {
+												echo
+												'<label class="selectgroup-item">
+													<input type="radio" name="category" value="' .  $c . '" class="selectgroup-input" checked>
+													<span class="selectgroup-button">' . $c . '</span>
+												</label>';
+											}
+											else {
+												echo
+												'<label class="selectgroup-item">
+													<input type="radio" name="category" value="' .  $c . '" class="selectgroup-input">
+													<span class="selectgroup-button">' . $c . '</span>
+												</label>';
+											}
+										}
+									?>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">Style</label>
+								<div class="col-sm-9 selectgroup selectgroup-pills">
+									<?php 
+										$style_arr = array("Modern Minimalist", "Industrial Style", "Traditional / Classic Style", "Art Deco Style", 
+															"English Country Style", "Coastal Style", "Eclectic Style", "Asian / Zen Style", "Rustic Style", "Hi-Tech Style");
+
+										if (empty($style))
+											$style = $style_arr[0];
+
+										foreach ($style_arr as $s) {
+											if ($s == $style) {
+												echo
+												'<label class="selectgroup-item">
+													<input type="radio" name="style" value="' .  $s . '" class="selectgroup-input" checked>
+													<span class="selectgroup-button">' . $s . '</span>
+												</label>';
+											}
+											else {
+												echo
+												'<label class="selectgroup-item">
+													<input type="radio" name="style" value="' .  $s . '" class="selectgroup-input">
+													<span class="selectgroup-button">' . $s . '</span>
+												</label>';
+											}
+										}
+									?>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">Description</label>
+								<div class="col-sm-9">
+									<textarea class="form-control" name="description" cols="30" rows="10" required><?php echo $description; ?></textarea>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">Thumbnail</label>
+								<?php if (!empty($portfolio_id)): ?>
+								<div class="col-sm-3">
+									<div class="gallery gallery-fw" data-item-height="100">
+										<div class="gallery-item" data-image="assets/img/<?php echo empty($thumbnail_path) ? 'news/img09.jpg' : $thumbnail_path; ?>" data-title="" href="assets/img/<?php echo empty($thumbnail_path) ? 'news/img09.jpg' : $thumbnail_path; ?>" title="" style="height: 100px; background-image: url(&quot;assets/img/<?php echo empty($thumbnail_path) ? 'news/img09.jpg' : $thumbnail_path; ?>&quot;);"></div>
 									</div>
 								</div>
+								<?php endif; ?>
+								<div class="<?php echo empty($portfolio_id) ? "col-sm-9" : "col-sm-5 ml-4"; ?> custom-file">
+									<input type="file" name="thumbnail" class="custom-file-input" id="thumbnail" <?php echo empty($portfolio_id) ? "required" : ""; ?> onchange="changeFileLabel(this.id)">
+									<label class="custom-file-label" for="thumbnail">Choose file</label>
+									<div class="text-danger pt-3"><?php echo $thumbnailErr; ?></div>
+								</div>
 							</div>
-							<label class="col-sm-3 col-form-label"></label>
+							<div class="form-group row pt-3">
+								<label class="col-sm-3 col-form-label">Panorama</label>
+								<?php if (!empty($portfolio_id)): ?>
+								<div class="col-sm-3">
+									<div class="gallery gallery-fw" data-item-height="100">
+										<div class="gallery-item" data-image="assets/img/<?php echo empty($panorama_path) ? 'news/img09.jpg' : $panorama_path; ?>" data-title="" href="assets/img/<?php echo empty($panorama_path) ? 'news/img09.jpg' : $panorama_path; ?>" title="" style="height: 100px; background-image: url(&quot;assets/img/<?php echo empty($panorama_path) ? 'news/img09.jpg' : $panorama_path; ?>&quot;);"></div>
+									</div>
+								</div>
+								<?php endif; ?>
+								<div class="<?php echo empty($portfolio_id) ? "col-sm-9" : "col-sm-5 ml-4"; ?> custom-file">
+									<input type="file" name="panorama" class="custom-file-input" id="panorama" <?php echo empty($portfolio_id) ? "required" : ""; ?> onchange="changeFileLabel(this.id)">
+									<label class="custom-file-label" for="panorama">Choose file</label>
+									<div class="text-danger pt-3"><?php echo $panoramaErr; ?></div>
+								</div>
+							</div>
+							<div class="form-group row pt-3">
+								<label class="col-sm-3 col-form-label">Images</label>
+								<?php if (!empty($portfolio_id)): ?>
+								<div class="col-sm-9">
+									<div class="form-group row">
+										<div class="row gutters-sm">
+										<?php foreach ($images_path as $img_path): ?>
+										<div class="col-6 col-sm-4">
+											<label class="imagecheck mb-4">
+											<input name="imagecheck[]" type="checkbox" value="<?php echo $img_path; ?>" class="imagecheck-input" onchange="checkImagesField(this)" checked="">
+											<figure class="imagecheck-figure">
+												<img src="assets/img/<?php echo $img_path; ?>" alt="" class="imagecheck-image">
+											</figure>
+											</label>
+										</div>
+										<?php endforeach; ?>
+										</div>
+									</div>
+								</div>
+								<label class="col-sm-3 col-form-label"></label>
+								<?php endif; ?>
+								<div class="col-sm-9 custom-file">
+									<input type="file" name="images[]" class="custom-file-input" id="images" onchange="checkImagesField(this);showImagesList()" multiple <?php echo empty($portfolio_id) ? "required" : ""; ?>>
+									<label class="custom-file-label" for="images">Choose file</label><br/>
+									<div class="text-danger pt-3"><?php echo $imagesErr; ?></div>
+									
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-3 col-form-label"></div>
+								<pre class="col-sm-9" id="imagesList" style="display:none;"></pre>
+							</div>
+							<?php if (!empty($portfolio_id)): ?>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label">Views</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" value="<?php echo $views; ?>" disabled>
+								</div>
+							</div>
 							<?php endif; ?>
-							<div class="col-sm-9 custom-file">
-								<input type="file" name="images[]" class="custom-file-input" id="images" onchange="checkImagesField(this);showImagesList()" multiple <?php echo empty($portfolio_id) ? "required" : ""; ?>>
-								<label class="custom-file-label" for="images">Choose file</label><br/>
-								<div class="text-danger pt-3"><?php echo $imagesErr; ?></div>
-								
 							</div>
 						</div>
-						<div class="form-group row">
-							<div class="col-sm-3 col-form-label"></div>
-							<pre class="col-sm-9" id="imagesList" style="display:none;"></pre>
-						</div>
-						<?php if (!empty($portfolio_id)): ?>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Views</label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" value="<?php echo $views; ?>" disabled>
-							</div>
-						</div>
-						<?php endif; ?>
-						</div>
-					</div>
-				</form>
-                </div>
+					</form>
+				</div>
+				<div class="col-12 col-md-6 col-lg-6">
+					<form action="portfolio.php?portfolio_id=<?php echo $_GET['portfolio_id']; ?>" method="post">
+						<input type="hidden" name="portfolio_id" value="<?php echo $_GET['portfolio_id'] ?>">
+						<button type="submit" name="delete" value="true" class="btn btn-icon btn-danger mt-3 mx-3 float-right"><i class="fas fa-trash"></i></button> 
+					</form>
+				</div>
             </div>
           </div>
         </section>
@@ -445,7 +470,9 @@
 
 	<!-- JS Libraies -->
 	<script src="assets/modules/chocolat/dist/js/jquery.chocolat.min.js"></script>
-	<script src="assets/modules/sweetalert/sweetalert.min.js"></script>
+	<!-- <script src="assets/modules/sweetalert/sweetalert.min.js"></script> -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 	<!-- Page Specific JS File -->
 	<script>
@@ -455,7 +482,7 @@
 			var checkedOne = Array.prototype.slice.call(checkboxes).some(x => x.checked);
 
 			if (!checkedOne && document.getElementById("images").files.length == 0) {
-				swal('Warning', 'You need to select at least one images.', 'warning');
+				Swal.fire('Warning', 'You need to select at least one images.', 'warning');
 				checkbox_element.checked = true;
 			}
 		}

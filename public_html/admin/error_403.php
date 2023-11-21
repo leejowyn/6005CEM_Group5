@@ -1,4 +1,6 @@
-
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,15 +33,23 @@
         <div class="container mt-5 my-auto">
         <div class="page-error">
             <div class="page-inner">
-            <h1>403</h1>
-            <div class="page-description">
-                You do not have access to this page.
-            </div>
-            <div class="page-search">
-                <div class="mt-3">
-                <a href="dashboard.php" class="btn btn-primary">Back to Dashboard</a>
+              <h1>403</h1>
+              <div class="page-description">
+                  You do not have access to this page.
+              </div>
+              <?php if ($_SESSION['admin_position'] != 'Customer Service'): ?>
+                <div class="page-search">
+                  <div class="mt-3">
+                  <a href="dashboard.php" class="btn btn-primary">Back to Dashboard</a>
+                  </div>
                 </div>
-            </div>
+              <?php else: ?>
+                <div class="page-search">
+                  <div class="mt-3">
+                  <a href="users.php" class="btn btn-primary">Back to Live Chat</a>
+                  </div>
+                </div>
+              <?php endif; ?>
             </div>
         </div>
         <div class="simple-footer mt-5">

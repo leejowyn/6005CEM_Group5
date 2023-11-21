@@ -66,11 +66,10 @@
                     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <ul>
-                                <li>Encourage users to create strong, unique passwords for their accounts.</li>
-                                <li>Emphasize the use of a combination of uppercase and lowercase letters, numbers, and special characters.</li>
-                                <li>Suggest the use of password manager tools to generate and store complex passwords securely.</li>
-                            </ul>
+                            <li>The users to create strong, unique passwords for their accounts.</li>
+                            <li>Emphasize the use of a combination of uppercase and lowercase letters, numbers, and special characters.</li>
+                            <li>Suggest the use of password manager tools to generate and store complex passwords securely.</li>
+                            <li>After the user create the password the system will hashed the password to avoid the admin open the user account or the hacker hack to datbase to get all the user password info.</li>
                         </div>
                     </div>
                 </div>
@@ -78,16 +77,13 @@
                     <h2 class="accordion-header" id="flush-headingTwo">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                            Two-Factor Authentication (2FA)
+                            Live Chat data encryption
                         </button>
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <ul>
-                                <li>Promote the use of two-factor authentication to add an extra layer of security to user accounts.</li>
-                                <li>Explain how 2FA can help protect accounts even if passwords are compromised.</li>
-                            </ul>
+                            <p>When users send important messages in the live chat, our system automatically encodes the messages to prevent hacking attempts. The encoded information is accessible only to administrators, ensuring secure communication.</p>
                         </div>
                     </div>
                 </div>
@@ -102,10 +98,7 @@
                     <div id="flush-collapseThree" class="accordion-collapse collapse"
                         aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <ul>
-                                <li>Encourage users to update their passwords regularly to reduce the risk of unauthorized access.</li>
-                                <li>Provide reminders or notifications for users to change their passwords at predefined intervals.</li>
-                            </ul>
+                            <p>Requiring users to change their password every three weeks is important for security. However, even though the passwords are hashed, it is crucial to recognize that frequent password changes alone may not provide sufficient security and can even be counterproductive.</p>
                         </div>
                     </div>
                 </div>
@@ -121,10 +114,7 @@
                     <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <ul>
-                                <li>Advise users to access the application only through secure and trusted networks.</li>
-                                <li>Highlight the importance of using HTTPS to encrypt data transmitted between the user's device and the application server.</li>
-                            </ul>
+                            </p>If a user logs in from an external computer, it's essential to remember to log out to prevent subsequent users from accessing the account and performing unauthorized actions.</p>                        </div>
                         </div>
                     </div>
                 </div>
@@ -139,10 +129,7 @@
                     <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingSix"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <ul>
-                                <li>Educate users on how to recognize phishing attempts, such as suspicious emails or fake websites.</li>
-                                <li>Provide examples of common phishing tactics and advise users to verify the authenticity of requests for sensitive information.</li>
-                            </ul>
+                            <p>We will not send any text or email notifications to users instead, any announcements will be posted on the announcement board.</p>
                         </div>
                     </div>
                 </div>
@@ -151,16 +138,13 @@
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseSeven" aria-expanded="false"
                             aria-controls="flush-collapseSeven">
-                            Logout After Sessions
+                            User-friendly error message
                         </button>
                     </h2>
                     <div id="flush-collapseSeven" class="accordion-collapse collapse"
                         aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <ul>
-                                <li>Emphasize the importance of logging out of their accounts, especially on shared or public computers.</li>
-                                <li>Implement automatic session timeouts to enhance security when users forget to log out.</li>
-                            </ul>
+                            <p>If the user enters incorrect information or fails to follow the specified format during data entry, an error message will be displayed, prompting the user to re-enter the information according to the provided instructions. Only after correcting and resubmitting the data in the required format will it be saved to the database.</p>
                         </div>
                     </div>
                 </div>
@@ -169,16 +153,13 @@
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseEight" aria-expanded="false"
                             aria-controls="flush-collapseEight">
-                            Device Security
+                            Recent Activities
                         </button>
                     </h2>
                     <div id="flush-collapseEight" class="accordion-collapse collapse"
                         aria-labelledby="flush-headingEight" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            <ul>
-                                <li>Encourage users to secure their devices with passwords or biometric authentication.</li>
-                                <li>Remind them to install regular software updates and security patches for their operating systems and applications.</li>
-                            </ul>
+                            <p>We will monitor the user's recent activities to detect any suspicious or anonymous behavior.</p>
                         </div>
                     </div>
                 </div>

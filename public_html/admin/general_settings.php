@@ -1,7 +1,11 @@
 <?php
+  include 'permissions.php';
+
   $page = "general_settings";
-  $managerAccessOnly = true;
   session_start();
+
+  if (!hasPermission($_SESSION['admin_position'], 'update_general_settings'))
+    redirect403();
 
   $email = $contact_no = $address = $first_payment = $second_payment = $third_payment = "";
   $success_alert = $fail_alert = "";

@@ -5,7 +5,7 @@
   $dbc = mysqli_connect('localhost', 'root', '');
 	mysqli_select_db($dbc, 'in_haus');
 
-  if ($_SESSION['admin_position'] == "Project Manager") {
+  if ($_SESSION['admin_position'] == "Admin") {
     $query = "SELECT c.*, u.name as cust_name 
               FROM consultation c, user u 
               WHERE c.cust_id = u.user_id ";
@@ -97,11 +97,12 @@
                                 <th style="width:14%">Status</th>
                                 <th>Customer</th>
                                 <th style="width:14%">Product Leader</th>
+                                <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>  
                             <?php while ($row = mysqli_fetch_array($consultations)): ?>
-                            <tr>                              
+                            <tr id="consultation-<?php echo $row['consultation_id']; ?>">                              
                                 <td><a href="consultation.php?consultation_id=<?php echo $row['consultation_id']; ?>"><?php echo $row['consultation_id']; ?></a></td>
                                 <td><?php echo $row['consultation_type']; ?></td>
                                 <td><?php echo date("d M Y", strtotime($row['consultation_date'])); ?>, <?php echo date("g:i a", strtotime($row['consultation_time'])); ?></td>
@@ -150,6 +151,11 @@
                                       }
                                     ?>
                                 </td>
+                                <td>
+                                  <button class="btn btn-danger" onclick="deleteConsultation(<?php echo $row['consultation_id']; ?>)">
+                                    <i class="fas fa-trash"></i>
+                                  </button>
+                                </td>
                             </tr> 
                             <?php endwhile; ?>
                           </tbody>
@@ -177,7 +183,7 @@
         success: function(result) {
           console.log(result);
           if (result == 1) {
-            swal(
+            Swal.fire(
               'Successful', 
               'Project leader of consultation #' + consultation_id + ' has been successfully updated.', 
               'success'
@@ -186,7 +192,7 @@
             document.getElementById("project_leader_" + consultation_id).innerHTML = staff[admin_id];
           }
           else {
-            swal(
+            Swal.fire(
               'Oops!', 
               'Something went wrong. Fail to update project leader of consultation.', 
               'error'
@@ -209,7 +215,7 @@
           result = JSON.parse(result);
           
           if (result.success == 1) {
-            swal(
+            Swal.fire(
               'Successful', 
               'Status of consultation #' + consultation_id + ' has been successfully updated.', 
               'success'
@@ -222,12 +228,56 @@
             }
           }
           else {
-            swal(
+            Swal.fire(
               'Oops!', 
               'Something went wrong. Fail to update consultation status.', 
               'error'
             );
           }
+        }
+      });
+    }
+
+    function deleteConsultation(consultation_id) {
+      Swal.fire({
+        title: 'Are you sure you want to delete consultation #' + consultation_id + '?',
+        text: "You won't be able to revert this.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel it.',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: 'post',
+            url: 'consultation.php?consultation_id=' + consultation_id,
+            data: {
+              consultation_id: consultation_id, 
+              delete: 1
+            },
+            success: function(result) {
+              console.log(result);
+              result = JSON.parse(result);
+
+              if (result.success == true) {
+                Swal.fire(
+                  'Successful', 
+                  'Consultation #' + consultation_id + ' has been successfully deleted.', 
+                  'success'
+                );
+                document.getElementById('consultation-' + consultation_id).style.display = 'none';
+              }
+              else {
+                Swal.fire(
+                  'Oops!', 
+                  'Something went wrong. Fail to delete consultation #' + consultation_id + '.', 
+                  'error'
+                );
+              }
+            }
+          });
         }
       });
     }
@@ -247,7 +297,8 @@
   <script src="assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
   <script src="assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
   <script src="assets/modules/jquery-ui/jquery-ui.min.js"></script>
-  <script src="assets/modules/sweetalert/sweetalert.min.js"></script>
+  <!-- <script src="assets/modules/sweetalert/sweetalert.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Page Specific JS File -->
   <script src="assets/js/page/components-table.js"></script>

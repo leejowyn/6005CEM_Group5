@@ -1,6 +1,11 @@
 <?php 
   session_start();
+  include 'permissions.php';
   include_once "config.php";
+
+  if (!hasPermission($_SESSION['admin_position'], 'livechat'))
+    redirect403();
+
   if(!isset($_SESSION['admin_id'])){
     header("location: login.php");
   }
