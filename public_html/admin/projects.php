@@ -6,7 +6,7 @@
 	mysqli_select_db($dbc, 'in_haus');
 
   // get all project record
-  if ($_SESSION['admin_position'] == "Project Manager") {
+  if ($_SESSION['admin_position'] == "Admin") {
     $query = 'SELECT p.*, uc.name as cust_name, uc.email as cust_email, ua.name as admin_name 
               FROM project p, user uc, user ua  
               WHERE p.cust_id = uc.user_id 
@@ -113,11 +113,12 @@
                                 <th>Consultation ID</th>
                                 <th>Customer</th>
                                 <th>Project Leader</th>
+                                <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>  
                             <?php while ($row = mysqli_fetch_array($projects)): ?>
-                            <tr>                              
+                            <tr id="project-<?php echo $row['project_id']; ?>">                              
                                 <td><a href="project.php?project_id=<?php echo $row['project_id']; ?>"><?php echo $row['project_id']; ?></a></td>
                                 <td><?php echo $row['project_name']; ?></td>
                                 <td><?php echo number_format($row['project_fee']); ?></td>
@@ -131,7 +132,7 @@
                                     else if ($row['project_status'] == "Waiting for Admin Approval (Contract)") {
                                       echo $row['project_status'];
 
-                                      if ($logged_in_admin_position == "Project Manager") {
+                                      if ($logged_in_admin_position == "Admin") {
                                         echo '<div class="pt-2" id="project_status_approval_'.$row['project_id'].'">
                                             <button class="btn btn-icon icon-left btn-success mr-2" onclick="updateProjectStatus('.$row['project_id'].',\'Contract Approved\', \''.$row['cust_name'].'\', \''.$row['cust_email'].'\')"><i class="fas fa-check"></i> Approve</a> 
                                             <button class="btn btn-icon icon-left btn-danger" onclick="updateProjectStatus('.$row['project_id'].',\'Waiting for Staff to Upload Contract\', \''.$row['cust_name'].'\', \''.$row['cust_email'].'\')"><i class="fas fa-times"></i> Reject</a>
@@ -171,6 +172,11 @@
                                 <td><a href="consultation.php?consultation_id=<?php echo $row['consultation_id']; ?>" target="_blank"><?php echo $row['consultation_id']; ?></a></td>
                                 <td><?php echo $row['cust_name']; ?></td>
                                 <td><?php echo $row['admin_name']; ?></td>
+                                <td>
+                                  <button class="btn btn-danger" onclick="deleteProject(<?php echo $row['project_id']; ?>)">
+                                    <i class="fas fa-trash"></i>
+                                  </button>
+                                </td>
                             </tr> 
                             <?php endwhile; ?>
                           </tbody>
@@ -198,14 +204,14 @@
         success: function(result) {
           console.log(result);
           if (result == 1) {
-            swal(
+            Swal.fire(
               'Successful', 
               'Payment status of project #' + project_id + ' has been successfully updated.', 
               'success'
             );
           }
           else {
-            swal(
+            Swal.fire(
               'Oops!', 
               'Something went wrong. Fail to update payment status of project.', 
               'error'
@@ -228,7 +234,7 @@
         success: function(result) {
           console.log("result: " + result);
           if (result == 1) {
-            swal(
+            Swal.fire(
               'Successful', 
               'Status of project #' + project_id + ' has been successfully updated.', 
               'success'
@@ -237,12 +243,56 @@
             document.getElementById("project_status_" + project_id).innerHTML = project_status;
           }
           else {
-            swal(
+            Swal.fire(
               'Oops!', 
               'Something went wrong. Fail to update status of project.', 
               'error'
             );
           }
+        }
+      });
+    }
+
+    function deleteProject(project_id) {
+      Swal.fire({
+        title: 'Are you sure you want to delete project #' + project_id + ' and its related record?',
+        text: "You won't be able to revert this.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel it.',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: 'post',
+            url: 'project.php?project_id=' + project_id,
+            data: {
+              project_id: project_id, 
+              delete: 1
+            },
+            success: function(result) {
+              console.log(result);
+              result = JSON.parse(result);
+
+              if (result.success == true) {
+                Swal.fire(
+                  'Successful', 
+                  'Project #' + project_id + ' has been successfully deleted.', 
+                  'success'
+                );
+                document.getElementById('project-' + project_id).style.display = 'none';
+              }
+              else {
+                Swal.fire(
+                  'Oops!', 
+                  'Something went wrong. Fail to delete project #' + project_id + '.', 
+                  'error'
+                );
+              }
+            }
+          });
         }
       });
     }
@@ -262,7 +312,8 @@
   <script src="assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
   <script src="assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js"></script>
   <script src="assets/modules/jquery-ui/jquery-ui.min.js"></script>
-  <script src="assets/modules/sweetalert/sweetalert.min.js"></script>
+  <!-- <script src="assets/modules/sweetalert/sweetalert.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Page Specific JS File -->
   <script src="assets/js/page/components-table.js"></script>

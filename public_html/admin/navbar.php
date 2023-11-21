@@ -5,29 +5,16 @@
 	  mysqli_select_db($dbc, 'in_haus');
 
     $logged_in_admin_id = $_SESSION['admin_id'];
-		// $query = 'SELECT admin_name, admin_position FROM admin WHERE admin_id = ' . $logged_in_admin_id;
-
-		// if ($result = mysqli_query($dbc, $query)) {
-		// 	$row = mysqli_fetch_assoc($result);
-		// 	$logged_in_admin_name = $row['admin_name'];
-    //   $logged_in_admin_position = $row['admin_position'];
-    // }
-
     $logged_in_admin_name = $_SESSION['admin_name'];
     $logged_in_admin_email = $_SESSION['admin_email'];
     $logged_in_admin_position = $_SESSION['admin_position'];
-
-    if (empty($managerAccessOnly))
-      $managerAccessOnly = false;
-
-    if ($logged_in_admin_position != "Project Manager" && $managerAccessOnly) 
-      echo "<script>window.location = 'error_403.php';</script>";
 
     mysqli_close($dbc);
   }
   else {
     echo "<script>window.location = 'login.php';</script>";
   }
+  
 ?>
 <nav class="navbar navbar-expand-lg main-navbar">
         <form class="form-inline mr-auto">
@@ -68,7 +55,7 @@
           </div>
           <ul class="sidebar-menu">
             <li class="<?php if ($page == "dashboard") echo "active"; ?>"><a class="nav-link" href="dashboard.php"><i class="fas fa-chart-line"></i> <span>Dashboard</span></a></li>
-            <?php if ($logged_in_admin_position == "Project Manager"): ?>
+            <?php if ($logged_in_admin_position == "Admin"): ?>
             <li class="<?php if ($page == "recent_activities") echo "active"; ?>"><a class="nav-link" href="recent_activities.php"><i class="fas fa-history"></i> <span>Recent Activities</span></a></li>
             <?php endif; ?>
             <li class="<?php if ($page == "consultations") echo "active"; ?>"><a class="nav-link" href="consultations.php"><i class="fas fa-handshake"></i> <span>Consultations</span></a></li>
@@ -77,12 +64,12 @@
             <li class="<?php if ($page == "general_settings" || $page == "portfolios" || $page == "staffs") echo "active"; ?>">
               <a href="#" class="nav-link has-dropdown"><i class="fas fa-cog"></i><span>Settings</span></a>
               <ul class="dropdown-menu">
-                <?php if ($logged_in_admin_position == "Project Manager"): ?>
+                <?php if ($logged_in_admin_position == "Admin"): ?>
                 <li class="<?php if ($page == "general_settings") echo "active"; ?>"><a class="nav-link" href="general_settings.php">General</a></li>
                 <?php endif; ?>
                 <li class="<?php if ($page == "portfolios") echo "active"; ?>"><a class="nav-link" href="portfolios.php">Portfolios</a></li>
-                <?php if ($logged_in_admin_position == "Project Manager"): ?>
-                <li class="<?php if ($page == "staffs") echo "active"; ?>"><a class="nav-link" href="staffs.php">Staffs</a></li>
+                <?php if ($logged_in_admin_position == "Admin"): ?>
+                <li class="<?php if ($page == "users") echo "active"; ?>"><a class="nav-link" href="user_listing.php">Users</a></li>
                 <?php endif; ?>
               </ul>
             </li>

@@ -1,105 +1,5 @@
 <?php
 
-  function getActivitiesArray($activities, $type, $result) {
-    $created_datetime = $last_modified_datetime = $datetime = $action = $payment_status = "";
-    
-    while ($row = mysqli_fetch_array($result)) {
-      if ($type == "consultation" || $type == "project") {
-        $created_datetime = (!empty($row['created_datetime'])) ? $row['created_datetime'] : "";
-        $last_modified_datetime = (!empty($row['last_modified_datetime'])) ? $row['last_modified_datetime'] : "";
-
-        if ($created_datetime == $last_modified_datetime) {
-          $datetime = $created_datetime;
-          $action = "create";
-        }
-        else {
-          $datetime = $last_modified_datetime;
-          $action = "update";
-        }
-      }
-      else if ($type == "payment") {
-        if (!empty($row['payment_datetime'])) {
-          $payment = json_decode($row['payment_datetime']);
-
-          if (!empty($payment->{'1'})) {
-            $payment_status = "1st Payment";
-            $datetime = $payment->{'1'};
-          }
-          if (!empty($payment->{'2'})) {
-            $payment_status = "2nd Payment";
-            $datetime = $payment->{'2'};
-          }
-          if (!empty($payment->{'3'})) {
-            $payment_status = "3rd Payment";
-            $datetime = $payment->{'3'};
-          }
-            
-        }
-      }
-      else if ($type == "feedback") {
-        $datetime = (!empty($row['feedback_date'])) ? $row['feedback_date'] : "";
-      }
-
-      $activity = array(
-        "consultation_id" => (!empty($row['consultation_id'])) ? $row['consultation_id'] : "",
-        "project_id" => (!empty($row['project_id'])) ? $row['project_id'] : "",
-        "feedback_id" => (!empty($row['feedback_id'])) ? $row['feedback_id'] : "",
-        "project_name" => (!empty($row['project_name'])) ? $row['project_name'] : "",
-        "admin_name" => (!empty($row['admin_name'])) ? $row['admin_name'] : "",
-        "cust_name" => (!empty($row['cust_name'])) ? $row['cust_name'] : "",
-        "action" => $action,
-        "type" => $type,
-        "consultation_datetime" => (!empty($row['consultation_date']) && !empty($row['consultation_time'])) ? date("d M Y", strtotime($row['consultation_date'])) . ", " . date("g:i a", strtotime($row['consultation_time'])) : "",
-        "payment_status" => $payment_status
-      );
-      $activities[$datetime] = $activity;
-
-      if ($action == "update") {
-        $datetime = (!empty($row['created_datetime'])) ? $row['created_datetime'] : "";
-        $activity = array(
-          "consultation_id" => (!empty($row['consultation_id'])) ? $row['consultation_id'] : "",
-          "project_id" => (!empty($row['project_id'])) ? $row['project_id'] : "",
-          "feedback_id" => (!empty($row['feedback_id'])) ? $row['feedback_id'] : "",
-          "project_name" => (!empty($row['project_name'])) ? $row['project_name'] : "",
-          "admin_name" => (!empty($row['admin_name'])) ? $row['admin_name'] : "",
-          "cust_name" => (!empty($row['cust_name'])) ? $row['cust_name'] : "",
-          "action" => "create",
-          "type" => $type,
-          "consultation_datetime" => (!empty($row['consultation_date']) && !empty($row['consultation_time'])) ? date("d M Y", strtotime($row['consultation_date'])) . ", " . date("g:i a", strtotime($row['consultation_time'])) : "",
-          "payment_status" => $payment_status
-        );
-      }
-      $activities[$datetime] = $activity;
-
-    }
-
-    return $activities;
-  }
-
-  function get_time_ago( $time ) {
-    $time_difference = time() - $time;
-
-    if( $time_difference < 1 ) { return 'less than 1 second ago'; }
-    $condition = array( 12 * 30 * 24 * 60 * 60 =>  'year',
-                30 * 24 * 60 * 60       =>  'month',
-                24 * 60 * 60            =>  'day',
-                60 * 60                 =>  'hour',
-                60                      =>  'minute',
-                1                       =>  'second'
-    );
-
-    foreach( $condition as $secs => $str )
-    {
-        $d = $time_difference / $secs;
-
-        if( $d >= 1 )
-        {
-            $t = round( $d );
-            return $t . ' ' . $str . ( $t > 1 ? 's' : '' ) . ' ago';
-        }
-    }
-  }
-
   function getChartData($year, $month) {
 
     $dbc = mysqli_connect('localhost', 'root', '');
@@ -158,8 +58,13 @@
     );
   }
 
+  include 'permissions.php';
+
   $page = "dashboard";
   session_start();
+
+  if (!hasPermission($_SESSION['admin_position'], 'view_dashboard'))
+    redirect403();
 
   $dbc = mysqli_connect('localhost', 'root', '');
 	mysqli_select_db($dbc, 'in_haus');
@@ -267,53 +172,6 @@
   $this_year_chart_data = getChartData($this_year, "");
   $last_year_chart_data = getChartData($last_year, "");
 
-  // $print['this_month_chart_data'] = $this_month_chart_data;
-  // $print['last_month_chart_data'] = $last_month_chart_data;
-  // $print['this_year_chart_data'] = $this_year_chart_data;
-  // $print['last_year_chart_data'] = $last_year_chart_data;
-
-  // echo '<pre>';
-  // print_r($print);
-  // echo '</pre>';
-
-
-  # RECENT ACTIVITIES
-  // select from consultation table
-  $query = 'SELECT c.consultation_id, c.created_datetime, c.last_modified_datetime, c.consultation_date, c.consultation_time, 
-            uc.name as cust_name, ua.name as admin_name 
-            FROM consultation c, user ua, user uc 
-            WHERE c.cust_id = uc.user_id 
-            AND c.admin_id = ua.user_id';
-  $result = mysqli_query($dbc, $query);
-  $activities = getActivitiesArray($activities, "consultation", $result);
-
-  // select from project table
-  $query = 'SELECT p.project_id, p.project_name, p.created_datetime, p.last_modified_datetime, 
-            u.name as admin_name
-            FROM project p, user u 
-            WHERE p.admin_id = u.user_id';
-  $result = mysqli_query($dbc, $query);
-  $activities = getActivitiesArray($activities, "project", $result);
-
-  // select payment from project table
-  $query = 'SELECT p.project_id, p.project_name, p.payment_datetime, 
-            u.name as cust_name 
-            FROM project p, user u 
-            WHERE p.cust_id = u.user_id';
-  $result = mysqli_query($dbc, $query);
-  $activities = getActivitiesArray($activities, "payment", $result);
-
-  // select from feedback table
-  $query = 'SELECT f.*, p.project_name, u.name as cust_name 
-            FROM feedback f, project p, user u 
-            WHERE f.project_id = p.project_id 
-            AND p.cust_id = u.user_id';
-  $result = mysqli_query($dbc, $query);
-  $activities = getActivitiesArray($activities, "feedback", $result);
-
-  krsort($activities);
-  $activities = array_slice($activities, 0, 5, true);
-
 
   # LATEST PROJECTS
   $query = "SELECT p.project_id, p.project_name, p.project_status, 
@@ -343,18 +201,6 @@
             ORDER BY portfolio_views DESC LIMIT 3";
   $portfolios = mysqli_query($dbc, $query);
 
-
-  # FEEDBACK FROM CUSTOMERS
-
-  $query = "SELECT COUNT(*) AS total FROM feedback";
-  $result = mysqli_query($dbc, $query);
-  $row = mysqli_fetch_assoc($result);
-  $total_feedback = $row['total'];
-
-  $query = "SELECT f.feedback_id, f.feedback_date, f.comment2, u.name FROM feedback f, user u 
-            WHERE f.cust_id = u.user_id 
-            ORDER BY f.feedback_id DESC LIMIT 3";
-  $feedbacks = mysqli_query($dbc, $query);
   
 
   mysqli_close($dbc);
@@ -510,7 +356,7 @@
 
           <!-- Chart & Recent Activities -->
           <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
               <div class="card">
                 <div class="card-header">
                 <h4 id="chart_title">Total Sales (<?php echo $this_year; ?>)</h4>
@@ -524,105 +370,10 @@
                 </div>
                 </div>
                 <div class="card-body">
-                <canvas id="chart" height="158"></canvas>
+                <canvas id="chart" height="95"></canvas>
                 </div>
               </div>
 			      </div>
-            <div class="col-lg-4 col-md-12 col-12 col-sm-12">
-              <div class="card">
-                <div class="card-header">
-                  <h4>Recent Activities</h4>
-                </div>
-                <div class="card-body">             
-                  <ul class="list-unstyled list-unstyled-border">
-                    <?php foreach ($activities as $datetime => $details): ?>
-                    <?php 
-                      $time_ago = get_time_ago(strtotime($datetime));
-                      $title = "";
-                      
-                      switch ($details['type']) {
-                        case 'consultation':
-                          $url = "consultation.php?consultation_id=" . $details['consultation_id'];
-                          $icon = "fas fa-comments";
-
-                          if ($details['action'] == "create") {
-                            $bg = "bg-success";
-                            $title = "New Consultation Made";
-                            $activity = sprintf('%s has made appointment for consultation on %s.', $details['cust_name'], $details['consultation_datetime']);
-                          }
-                          else if ($details['action'] == "update") {
-                            $bg = "bg-primary";
-                            $title = "Consultation Details Updated";
-                            $activity = sprintf('%s has updated the details for consultation #%d.', $details['admin_name'], $details['consultation_id']);
-                          }
-                          break;
-
-                        case 'project':
-                          $url = "project.php?project_id=" . $details['project_id'];
-                          $icon = "fas fa-clipboard-list";
-
-                          if ($details['action'] == "create") {
-                            $bg = "bg-success";
-                            $title = "New Project Confirmed";
-                            $activity = sprintf('A new project %s has been confirmed by %s.', $details['project_name'], $details['admin_name']);
-                          }
-                          else if ($details['action'] == "update") {
-                            $bg = "bg-primary";
-                            $title = "Project Details Updated";
-                            $activity = sprintf('The details of project %s has been updated.', $details['project_name']);
-                          }
-                          break;
-
-                        case 'payment':
-                          $url = "project.php?project_id=" . $details['project_id'];
-                          $icon = "fas fa-dollar-sign";
-                          $title = "Payment Made";
-                          $bg = "bg-warning";
-
-                          $activity = sprintf('%s has made %s for project %s.', $details['cust_name'], $details['payment_status'], $details['project_name']);
-                          break;
-
-                        case 'feedback':
-                          $url = "feedback.php?feedback_id=" . $details['feedback_id'];
-                          $icon = "fas fa-comment-dots";
-                          $title = "New Feedback Received";
-                          $bg = "bg-primary";
-                          
-                          $activity = sprintf('%s has gave a feedback for project %s.', $details['cust_name'], $details['project_name']);
-                          break;
-                        
-                        default:
-                          
-                          break;
-                      }
-                    
-                    ?>
-                    <li class="media">
-                      <div class="mr-3 rounded-circle <?php echo $bg; ?> d-flex justify-content-center align-items-center" style="width:50px; height:50px;">
-                        <i class="<?php echo $icon; ?>" style="color: #fff; font-size: 16px;"></i>
-                      </div>
-                      <div class="media-body">
-                        <div class="float-right text-primary"><?php echo $time_ago; ?></div>
-                        <div class="media-title">
-                          <a href="<?php echo $url; ?>" target="_blank">
-                            <?php echo $title; ?>
-                          </a>
-                        </div>
-                        <span class="text-small text-muted"><?php echo $activity; ?></span>
-                      </div>
-                    </li>
-                    <?php endforeach; ?>
-                  </ul>
-                  <?php if ($logged_in_admin_position == "Project Manager"): ?>
-                  <div class="text-center pt-1 pb-1">
-                    <a href="recent_activities.php" class="btn btn-primary btn-lg btn-round">
-                      View All
-                    </a>
-                  </div>
-                  <?php endif; ?>
-                </div>
-              </div>
-            </div>
           </div>
 
           <!-- Latest Projects & Latest Consultations -->
@@ -756,37 +507,6 @@
                       <div class="text-muted text-small"><?php echo number_format($portfolio['portfolio_views']); ?> views</div>
                     </div>
                     <?php endwhile; ?>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card card-hero">
-                <div class="card-header">
-                  <div class="card-icon">
-                    <i class="far fa-comment-dots"></i>
-                  </div>
-                  <h4><?php echo $total_feedback; ?></h4>
-                  <div class="card-description">Feedback from customers</div>
-                </div>
-                <div class="card-body p-0">
-                  <div class="tickets-list">
-                    <?php while ($feedback = mysqli_fetch_array($feedbacks)): ?> 
-                    <?php $time_ago = get_time_ago(strtotime($feedback['feedback_date'])); ?>
-                    <a href="feedback.php?feedback_id=<?php echo $feedback['feedback_id']; ?>" class="ticket-item">
-                      <div class="ticket-title">
-                        <h4><?php echo substr($feedback['comment2'], 0, 95) . " ..."; ?></h4>
-                      </div>
-                      <div class="ticket-info">
-                        <div><?php echo $feedback['name']; ?></div>
-                        <div class="bullet"></div>
-                        <div class="text-primary"><?php echo $time_ago; ?></div>
-                      </div>
-                    </a>
-                    <?php endwhile; ?>
-                    <a href="feedbacks.php" class="ticket-item ticket-more">
-                      View All <i class="fas fa-chevron-right"></i>
-                    </a>
                   </div>
                 </div>
               </div>

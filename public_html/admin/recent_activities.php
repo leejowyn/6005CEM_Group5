@@ -1,5 +1,7 @@
 <?php
 
+  include 'permissions.php';
+
   function getActivitiesArray($activities, $type, $result) {
     $created_datetime = $last_modified_datetime = $datetime = $action = $payment_status = "";
     
@@ -101,10 +103,11 @@
   }
 
   $page = "recent_activities";
-  $managerAccessOnly = true;
-
   session_start();
   date_default_timezone_set("Asia/Kuala_Lumpur");
+
+  if (!hasPermission($_SESSION['admin_position'], 'view_recent_activities'))
+    redirect403();
 
   $activities = array();
 

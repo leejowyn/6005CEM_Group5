@@ -25,6 +25,8 @@
     return array("success" => $okay, "insert_id" => $insert_id);
   }
 
+  include 'permissions.php';
+
   $page = "consultations";
   session_start();
 
@@ -86,8 +88,8 @@
 			$fail_alert = '<p style="color:red;">Could not retrieve the data because: <br/>' . mysqli_error($dbc) . '</p><p>The query being run was: ' . $query . '</p>';
 		}
 
-    if ($_SESSION['admin_position'] != "Project Manager" && $admin_id != $_SESSION['admin_id'])
-      header("Location: error_403.php");
+    if (!hasPermission($_SESSION['admin_position'], 'update_consultation', $admin_id))
+      redirect403();
 
     // get project leader list
     $query = 'SELECT user_id, name FROM user WHERE access_level = "Project Leader"';
@@ -201,6 +203,20 @@
   //   }
    
   // }
+
+  // delete consultation record from ajax request
+  if (isset($_POST['consultation_id']) && isset($_POST['delete'])) {
+    $consultation_id = $_POST['consultation_id'];
+    $okay = true;
+
+		$query = "DELETE FROM consultation WHERE consultation_id = $consultation_id";
+    if (!mysqli_query($dbc, $query)) {
+      $okay = false;
+    }
+
+    echo json_encode(array("success" => $okay));
+    exit();
+  }
 
   mysqli_close($dbc);
 ?>

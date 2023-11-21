@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Nov 17, 2023 at 02:44 AM
--- Server version: 5.7.36
--- PHP Version: 7.4.26
+-- Host: 127.0.0.1
+-- Generation Time: Nov 21, 2023 at 08:51 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,9 +27,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `consultation`
 --
 
-DROP TABLE IF EXISTS `consultation`;
-CREATE TABLE IF NOT EXISTS `consultation` (
-  `consultation_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `consultation` (
+  `consultation_id` int(10) UNSIGNED NOT NULL,
   `created_datetime` datetime NOT NULL,
   `last_modified_datetime` datetime DEFAULT NULL,
   `consultation_status` varchar(50) NOT NULL,
@@ -40,11 +39,8 @@ CREATE TABLE IF NOT EXISTS `consultation` (
   `design_range` varchar(30) NOT NULL,
   `consultation_remark` varchar(300) NOT NULL,
   `cust_id` int(10) UNSIGNED NOT NULL,
-  `admin_id` int(10) UNSIGNED DEFAULT NULL,
-  PRIMARY KEY (`consultation_id`),
-  KEY `cust_id` (`cust_id`),
-  KEY `admin_id` (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+  `admin_id` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `consultation`
@@ -55,45 +51,7 @@ INSERT INTO `consultation` (`consultation_id`, `created_datetime`, `last_modifie
 (2, '2022-10-23 19:30:54', '2022-10-23 19:42:54', 'Project Confirmed', '2022-10-29', '19:42:00', 'In Home', 'Industrial Style', 'Condo', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quas minima placeat id omnis doloremque earum illum possimus tenetur dolores vel recusandae distinctio iure, facere odit quaerat doloribus laborum fuga explicabo?', 5, 3),
 (3, '2022-10-24 19:30:54', '2022-11-19 13:12:25', 'Project Confirmed', '2022-10-30', '08:20:54', 'Virtual Meeting', 'Traditional / Classic Style,Art Deco Style,Eclectic Style', 'design range updated', 'I prefer Google Meet', 5, 2),
 (4, '2022-10-24 19:30:54', '2022-10-27 17:31:05', 'Project Confirmed', '2022-10-30', '20:18:54', 'Virtual Meeting', 'Art Deco Style,Eclectic Style', 'design range updated', 'Please use Google Meet, thx', 6, 3),
-(5, '2022-10-30 19:30:54', '2023-11-16 21:49:27', 'Pending', '2022-10-30', '08:18:54', 'Virtual Meeting', 'Industrial Style,Eclectic Style', 'design range updated', '', 6, 2),
-(6, '2023-11-16 00:00:00', NULL, 'Pending', '2023-11-25', '16:00:00', 'Phone Call', ' Modern Minimalist,Hi-Tech Style', 'bathroom', 'nooooo', 16, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `feedback`
---
-
-DROP TABLE IF EXISTS `feedback`;
-CREATE TABLE IF NOT EXISTS `feedback` (
-  `feedback_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `feedback_date` date NOT NULL,
-  `project_id` int(10) UNSIGNED NOT NULL,
-  `cust_id` int(10) UNSIGNED NOT NULL,
-  `expectation` text NOT NULL,
-  `workAgn` text NOT NULL,
-  `compare` text NOT NULL,
-  `communication` text NOT NULL,
-  `explanation` text NOT NULL,
-  `goal` text NOT NULL,
-  `comment` text NOT NULL,
-  `comment2` text NOT NULL,
-  PRIMARY KEY (`feedback_id`),
-  KEY `project_id` (`project_id`),
-  KEY `cust_id` (`cust_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `feedback`
---
-
-INSERT INTO `feedback` (`feedback_id`, `feedback_date`, `project_id`, `cust_id`, `expectation`, `workAgn`, `compare`, `communication`, `explanation`, `goal`, `comment`, `comment2`) VALUES
-(1, '2022-10-30', 2, 5, 'expectation1', 'workAgn1', 'compare1', 'communication1', 'explanation1', 'goal1', 'comment bla', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat a repellendus, necessitatibus aut ipsa vero dolores laboriosam eos debitis ipsam. Magni, nobis. Illum sed molestias minima laborum cum quaerat ipsam!'),
-(2, '2022-11-01', 1, 6, 'expectation2', 'workAgn2', 'compare2', 'communication2', 'explanation2', 'goal2', 'comment bla', 'comment blabla'),
-(3, '2017-11-22', 1, 6, 'N/A - Dont know what to expect', 'Slightly Likel', 'Inferior', 'Disagree', 'Neutral', 'Agree', 'good service', 'In Haus has a great team, friendly relation, they designed the ideal house for my needs. It is a fantastic project, we are very happy! They were originally recommended to us by a friend and now we recommend them.'),
-(4, '2017-11-22', 1, 6, 'Did Not Meet Expectations', 'Slightly Likel', 'Equal', 'Neutral', 'Agree', 'Strongly Agree', '123', 'The entire In Haus interior design team was truly amazing to work with. The design team fully captured our vision and need for functionality and gave us our dream home! They also made the process fun and exciting along the way and we trusted them completely. They truly are the best interior designers in Miami and would recommend them 100000%!!'),
-(5, '2017-11-22', 1, 6, 'Did Not Meet Expectations', 'Slightly Likel', 'Equal', 'Neutral', 'Agree', 'Strongly Agree', '123', 'From the ﬁrst moment that we walked into the oﬃce at In Haus, the staff was AMAZING! We were greeted by a cool, hip, young interior design team that took our request to make “NOT your grandpa’s condo” and turned it into our rock and roll dream! Although we were '),
-(6, '2019-11-22', 2, 2, 'Met Expectations', 'Moderately Likely', 'Slightly Inferior', 'Disagree', 'Strongly Disagree', 'Agree', 'test', 'test');
+(5, '2022-10-30 19:30:54', '2023-11-20 22:10:02', 'Pending', '2022-10-30', '08:18:54', 'Virtual Meeting', 'Industrial Style,Eclectic Style', 'design range updated', '', 6, 2);
 
 -- --------------------------------------------------------
 
@@ -101,16 +59,12 @@ INSERT INTO `feedback` (`feedback_id`, `feedback_date`, `project_id`, `cust_id`,
 -- Table structure for table `messages`
 --
 
-DROP TABLE IF EXISTS `messages`;
-CREATE TABLE IF NOT EXISTS `messages` (
-  `msg_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `messages` (
+  `msg_id` int(11) NOT NULL,
   `incoming_msg_id` int(255) UNSIGNED NOT NULL,
   `outgoing_msg_id` int(255) UNSIGNED NOT NULL,
-  `msg` varchar(1000) NOT NULL,
-  PRIMARY KEY (`msg_id`),
-  KEY `msg_incoming_msg_id_fk` (`incoming_msg_id`),
-  KEY `msg_outgoing_msg_id_fk` (`outgoing_msg_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+  `msg` varchar(1000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `messages`
@@ -127,18 +81,16 @@ INSERT INTO `messages` (`msg_id`, `incoming_msg_id`, `outgoing_msg_id`, `msg`) V
 -- Table structure for table `portfolio`
 --
 
-DROP TABLE IF EXISTS `portfolio`;
-CREATE TABLE IF NOT EXISTS `portfolio` (
-  `portfolio_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `portfolio` (
+  `portfolio_id` int(10) UNSIGNED NOT NULL,
   `portfolio_category` varchar(50) NOT NULL,
   `portfolio_style` varchar(50) NOT NULL,
   `portfolio_description` varchar(500) NOT NULL,
   `portfolio_thumbnail` varchar(260) NOT NULL,
   `portfolio_panorama` varchar(260) NOT NULL,
   `portfolio_images` text NOT NULL,
-  `portfolio_views` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`portfolio_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+  `portfolio_views` int(10) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `portfolio`
@@ -159,9 +111,8 @@ INSERT INTO `portfolio` (`portfolio_id`, `portfolio_category`, `portfolio_style`
 -- Table structure for table `project`
 --
 
-DROP TABLE IF EXISTS `project`;
-CREATE TABLE IF NOT EXISTS `project` (
-  `project_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `project` (
+  `project_id` int(10) UNSIGNED NOT NULL,
   `created_datetime` datetime NOT NULL,
   `last_modified_datetime` datetime NOT NULL,
   `project_name` varchar(50) NOT NULL,
@@ -174,12 +125,8 @@ CREATE TABLE IF NOT EXISTS `project` (
   `project_contract` varchar(260) NOT NULL,
   `cust_id` int(10) UNSIGNED NOT NULL,
   `consultation_id` int(10) UNSIGNED NOT NULL,
-  `admin_id` int(10) UNSIGNED NOT NULL,
-  PRIMARY KEY (`project_id`),
-  KEY `cust_id` (`cust_id`),
-  KEY `consultation_id` (`consultation_id`),
-  KEY `admin_id` (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4;
+  `admin_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `project`
@@ -222,13 +169,11 @@ INSERT INTO `project` (`project_id`, `created_datetime`, `last_modified_datetime
 -- Table structure for table `settings`
 --
 
-DROP TABLE IF EXISTS `settings`;
-CREATE TABLE IF NOT EXISTS `settings` (
-  `settings_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings` (
+  `settings_id` int(10) UNSIGNED NOT NULL,
   `settings_name` varchar(50) NOT NULL,
-  `settings_value` varchar(100) NOT NULL,
-  PRIMARY KEY (`settings_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+  `settings_value` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `settings`
@@ -248,30 +193,116 @@ INSERT INTO `settings` (`settings_id`, `settings_name`, `settings_value`) VALUES
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+  `user_id` int(11) UNSIGNED NOT NULL,
   `name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `phone_no` varchar(20) DEFAULT NULL,
   `access_level` varchar(50) NOT NULL,
-  `status` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+  `status` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`user_id`, `name`, `email`, `password`, `phone_no`, `access_level`, `status`) VALUES
-(1, 'Superman', 'superman@gmail.com', '$2y$10$QqOuiHzyPYReDC4.NnurkuBQL.ZcynjwKlvlO5jKF6T.FaCO5sHXy', NULL, 'Project Manager', NULL),
+(1, 'Superman', 'superman@gmail.com', '$2y$10$QqOuiHzyPYReDC4.NnurkuBQL.ZcynjwKlvlO5jKF6T.FaCO5sHXy', NULL, 'Admin', NULL),
 (2, 'Joey Cheng', 'chengxinye@gmail.com', '$2y$10$QCljfGxLgSN4WRRTxWe2tu8Nzyf/kwuD/ru6P0sLbmGhf3ExWSHVO', NULL, 'Project Leader', 'Active now'),
 (3, 'Mickey Mouse', 'mickeymouse@gmail.com', '$2y$10$O0OhespCFm0iTqJxthvZG.H9aHsfPTgUpXitwTvPmcTwG8gkuabuW', NULL, 'Project Leader', NULL),
 (4, 'Minnie Mouse', 'minniemouse@gmail.com', '$2y$10$O0OhespCFm0iTqJxthvZG.H9aHsfPTgUpXitwTvPmcTwG8gkuabuW', NULL, 'Customer Service', 'Active now'),
 (5, 'Ah Beng', 'tansinyi12@gmail.com', '$2y$10$oNfWVoVKBuXB5DenjuA3IOO0pJeuywBFpUgXNtE5tk/HuwdeBz8re', '0161234567', 'Normal User', 'Offline now'),
 (6, 'Mei Ling', 'meiling@gmail.com', '$2y$10$oNfWVoVKBuXB5DenjuA3IOO0pJeuywBFpUgXNtE5tk/HuwdeBz8re', '0161234567', 'Normal User', 'Active now'),
-(16, 'J', 'Jowyn2002@gmail.com', '$2y$10$rDzgtQNgloBYWfTsgMZ2A.g8xGtg/kFhIfOFnLfpdIn8VhKRLcGAW', '1', 'Normal User', 'Offline now');
+(16, 'J', 'Jowyn2002@gmail.com', '$2y$10$rDzgtQNgloBYWfTsgMZ2A.g8xGtg/kFhIfOFnLfpdIn8VhKRLcGAW', '1', 'Normal User', 'Offline now'),
+(18, 'J', 'Jowyn2002@gmail.com', '$2y$10$rDzgtQNgloBYWfTsgMZ2A.g8xGtg/kFhIfOFnLfpdIn8VhKRLcGAW', '1', 'Normal User', 'Offline now');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `consultation`
+--
+ALTER TABLE `consultation`
+  ADD PRIMARY KEY (`consultation_id`),
+  ADD KEY `cust_id` (`cust_id`),
+  ADD KEY `admin_id` (`admin_id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`msg_id`),
+  ADD KEY `msg_incoming_msg_id_fk` (`incoming_msg_id`),
+  ADD KEY `msg_outgoing_msg_id_fk` (`outgoing_msg_id`);
+
+--
+-- Indexes for table `portfolio`
+--
+ALTER TABLE `portfolio`
+  ADD PRIMARY KEY (`portfolio_id`);
+
+--
+-- Indexes for table `project`
+--
+ALTER TABLE `project`
+  ADD PRIMARY KEY (`project_id`),
+  ADD KEY `cust_id` (`cust_id`),
+  ADD KEY `consultation_id` (`consultation_id`),
+  ADD KEY `admin_id` (`admin_id`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`settings_id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`user_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `consultation`
+--
+ALTER TABLE `consultation`
+  MODIFY `consultation_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `msg_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `portfolio`
+--
+ALTER TABLE `portfolio`
+  MODIFY `portfolio_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `project`
+--
+ALTER TABLE `project`
+  MODIFY `project_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+
+--
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `settings_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables
@@ -281,15 +312,8 @@ INSERT INTO `user` (`user_id`, `name`, `email`, `password`, `phone_no`, `access_
 -- Constraints for table `consultation`
 --
 ALTER TABLE `consultation`
-  ADD CONSTRAINT `consultation_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `consultation_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`);
-
---
--- Constraints for table `feedback`
---
-ALTER TABLE `feedback`
-  ADD CONSTRAINT `feedback_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `feedback_project_id_fk` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`);
+  ADD CONSTRAINT `consultation_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `consultation_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `messages`
@@ -302,9 +326,9 @@ ALTER TABLE `messages`
 -- Constraints for table `project`
 --
 ALTER TABLE `project`
-  ADD CONSTRAINT `project_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `project_consultation_id_fk` FOREIGN KEY (`consultation_id`) REFERENCES `consultation` (`consultation_id`),
-  ADD CONSTRAINT `project_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `project_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `project_consultation_id_fk` FOREIGN KEY (`consultation_id`) REFERENCES `consultation` (`consultation_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `project_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

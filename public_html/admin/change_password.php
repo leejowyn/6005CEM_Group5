@@ -1,5 +1,10 @@
 <?php
 
+    // Function to hash the password securely
+    function hashPassword($password) {
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
     $page = "change_password";
     $pwInvalid = $pwChanged = false;
 
@@ -23,7 +28,9 @@
           $pwInvalid = true;
         }
         else {
-          $password = md5($_POST['password']);
+          // $password = md5($_POST['password']);
+          $password = hashPassword($_POST['password']);
+
           // update database
           $query = "UPDATE user SET 
                   password = '$password' 
