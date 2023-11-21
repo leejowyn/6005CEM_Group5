@@ -1,6 +1,11 @@
 <?php
+  include 'permissions.php';
+
   $page = "portfolios";
   session_start();
+
+  if (!hasPermission($_SESSION['admin_position'], 'view_portfolio'))
+    	redirect403();
 
 	$dbc = mysqli_connect('localhost', 'root', '');
 	mysqli_select_db($dbc, 'in_haus');
