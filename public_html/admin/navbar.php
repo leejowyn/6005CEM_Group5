@@ -5,14 +5,6 @@
 	  mysqli_select_db($dbc, 'in_haus');
 
     $logged_in_admin_id = $_SESSION['admin_id'];
-		// $query = 'SELECT admin_name, admin_position FROM admin WHERE admin_id = ' . $logged_in_admin_id;
-
-		// if ($result = mysqli_query($dbc, $query)) {
-		// 	$row = mysqli_fetch_assoc($result);
-		// 	$logged_in_admin_name = $row['admin_name'];
-    //   $logged_in_admin_position = $row['admin_position'];
-    // }
-
     $logged_in_admin_name = $_SESSION['admin_name'];
     $logged_in_admin_email = $_SESSION['admin_email'];
     $logged_in_admin_position = $_SESSION['admin_position'];

@@ -24,18 +24,6 @@
     $mail->Subject = 'In Haus - Feedback Form';
     $mail->Body = "<p>Hi ".$cust_name."! .Thank you for choosing out company! Below is the feedback form link, Please click in for feedback. Thank you<p><a href='http://localhost/public_html/user/feedBackForm.php?project_id=".$project_id."&cust_id=".$cust_id."'>Click here</a>";
     $mail->send();
-
-    // if ($mail->send()) {
-    //   $myfile = fopen("sendEmailDebug.txt", "w") or die("Unable to open file!");
-    //   fwrite($myfile,print_r("email sent", true));
-    //   fclose($myfile);
-    // }
-    // else {
-    //   $myfile = fopen("sendEmailDebug.txt", "w") or die("Unable to open file!");
-    //   fwrite($myfile,print_r("email fail to send", true));
-    //   fclose($myfile);
-    // }
-
   }
 
   $page = "projects";
