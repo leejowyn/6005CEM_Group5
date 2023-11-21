@@ -1,6 +1,12 @@
 <?php
+
+  include 'permissions.php';
+  
   $page = "consultations";
   session_start();
+
+  if (!hasPermission($_SESSION['admin_position'], 'view_consultation'))
+    	redirect403();
 
   $dbc = mysqli_connect('localhost', 'root', '');
 	mysqli_select_db($dbc, 'in_haus');
@@ -97,7 +103,9 @@
                                 <th style="width:14%">Status</th>
                                 <th>Customer</th>
                                 <th style="width:14%">Product Leader</th>
+                                <?php if (hasPermission($_SESSION['admin_position'], 'delete_consultation')): ?>
                                 <th>Action</th>
+                                <?php endif; ?>
                             </tr>
                           </thead>
                           <tbody>  
@@ -151,11 +159,13 @@
                                       }
                                     ?>
                                 </td>
+                                <?php if (hasPermission($_SESSION['admin_position'], 'delete_consultation')): ?>
                                 <td>
                                   <button class="btn btn-danger" onclick="deleteConsultation(<?php echo $row['consultation_id']; ?>)">
                                     <i class="fas fa-trash"></i>
                                   </button>
                                 </td>
+                                <?php endif; ?>
                             </tr> 
                             <?php endwhile; ?>
                           </tbody>

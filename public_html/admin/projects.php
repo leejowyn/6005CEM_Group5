@@ -1,6 +1,11 @@
 <?php
+  include 'permissions.php';
+
   $page = "projects";
   session_start();
+
+  if (!hasPermission($_SESSION['admin_position'], 'view_project'))
+    	redirect403();
 
   $dbc = mysqli_connect('localhost', 'root', '');
 	mysqli_select_db($dbc, 'in_haus');
@@ -113,7 +118,9 @@
                                 <th>Consultation ID</th>
                                 <th>Customer</th>
                                 <th>Project Leader</th>
+                                <?php if (hasPermission($_SESSION['admin_position'], 'delete_project')): ?>
                                 <th>Action</th>
+                                <?php endif; ?>
                             </tr>
                           </thead>
                           <tbody>  
@@ -172,11 +179,13 @@
                                 <td><a href="consultation.php?consultation_id=<?php echo $row['consultation_id']; ?>" target="_blank"><?php echo $row['consultation_id']; ?></a></td>
                                 <td><?php echo $row['cust_name']; ?></td>
                                 <td><?php echo $row['admin_name']; ?></td>
+                                <?php if (hasPermission($_SESSION['admin_position'], 'delete_project')): ?>
                                 <td>
                                   <button class="btn btn-danger" onclick="deleteProject(<?php echo $row['project_id']; ?>)">
                                     <i class="fas fa-trash"></i>
                                   </button>
                                 </td>
+                                <?php endif; ?>
                             </tr> 
                             <?php endwhile; ?>
                           </tbody>

@@ -60,7 +60,6 @@
             <?php endif; ?>
             <li class="<?php if ($page == "consultations") echo "active"; ?>"><a class="nav-link" href="consultations.php"><i class="fas fa-handshake"></i> <span>Consultations</span></a></li>
             <li class="<?php if ($page == "projects") echo "active"; ?>"><a class="nav-link" href="projects.php"><i class="fas fa-clipboard-list"></i> <span>Projects</span></a></li>
-            <li class="<?php if ($page == "feedbacks") echo "active"; ?>"><a class="nav-link" href="feedbacks.php"><i class="fas fa-comment-dots"></i> <span>Feedbacks</span></a></li>
             <li class="<?php if ($page == "general_settings" || $page == "portfolios" || $page == "staffs") echo "active"; ?>">
               <a href="#" class="nav-link has-dropdown"><i class="fas fa-cog"></i><span>Settings</span></a>
               <ul class="dropdown-menu">
