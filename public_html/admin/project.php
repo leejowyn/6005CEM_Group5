@@ -6,25 +6,7 @@
   require_once 'phpmailer/PHPMailer.php';
   require_once 'phpmailer/SMTP.php';
 
-  function sendFeedbackEmail($cust_id, $cust_name, $cust_email, $project_id) {
-
-    $mail = new PHPMailer(true);
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'p20012398@student.newinti.edu.my'; // Gmail address which you want to use as SMTP server
-    $mail->Password = 'jrbggwlluwqsjiny'; // Gmail address Password
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = '587';
-
-    $mail->setFrom('p20012398@student.newinti.edu.my'); // Gmail address which you used as SMTP server
-    $mail->addAddress($cust_email); // Email address where you want to receive emails (you can use any of your gmail address including the gmail address which you used as SMTP server)
-
-    $mail->isHTML(true);
-    $mail->Subject = 'In Haus - Feedback Form';
-    $mail->Body = "<p>Hi ".$cust_name."! .Thank you for choosing out company! Below is the feedback form link, Please click in for feedback. Thank you<p><a href='http://localhost/public_html/user/feedBackForm.php?project_id=".$project_id."&cust_id=".$cust_id."'>Click here</a>";
-    $mail->send();
-  }
+  include 'permissions.php';
 
   $page = "projects";
   session_start();
@@ -77,8 +59,8 @@
       $fail_alert = '<p style="color:red;">Could not retrieve the data because: <br/>' . mysqli_error($dbc) . '</p><p>The query being run was: ' . $query . '</p>';
     }
 
-    if ($_SESSION['admin_position'] == "Project Leader" && $admin_id != $_SESSION['admin_id'])
-      header("Location: error_403.php");
+    if (!hasPermission($_SESSION['admin_position'], 'update_project', $admin_id))
+      redirect403();
 
     // get project leader list
     $query = 'SELECT user_id, name FROM user WHERE access_level = "Project Leader"';
@@ -172,8 +154,6 @@
     if (mysqli_query($dbc, $query)) {
       echo true;
 
-      if ($project_status == "Completed")
-        sendFeedbackEmail($cust_id, $cust_name, $cust_email, $project_id);
     }
     else {
       echo false;
@@ -235,14 +215,25 @@
               WHERE project_id = '$project_id'";
 
     if (mysqli_query($dbc, $query)) {
-      if ($project_status == "Completed") 
-        sendFeedbackEmail($cust_id, $cust_name, $cust_email, $project_id);
-
       $success_alert = "Project has been updated successfully.";
     }
     else {
       $fail_alert = "Could not update the project because: <br/>" . mysqli_error($dbc) . "The query was: " . $query;
     }
+  }
+
+  // delete project record from ajax request
+  if (isset($_POST['project_id']) && isset($_POST['delete'])) {
+    $project_id = $_POST['project_id'];
+    $okay = true;
+
+		$query = "DELETE FROM project WHERE project_id = $project_id";
+    if (!mysqli_query($dbc, $query)) {
+      $okay = false;
+    }
+
+    echo json_encode(array("success" => $okay));
+    exit();
   }
 
   mysqli_close($dbc);
