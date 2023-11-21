@@ -41,10 +41,12 @@ function get_time_ago($time)
 }
 
 $page = "recent_activities";
-$managerAccessOnly = true;
 
 session_start();
 date_default_timezone_set("Asia/Singapore");
+
+if (!hasPermission($_SESSION['admin_position'], 'view_recent_activities'))
+    redirect403();
 
 $activities = array();
 
