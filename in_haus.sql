@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2023 at 03:47 PM
+-- Generation Time: Nov 21, 2023 at 10:06 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -51,44 +51,7 @@ INSERT INTO `consultation` (`consultation_id`, `created_datetime`, `last_modifie
 (2, '2022-10-23 19:30:54', '2022-10-23 19:42:54', 'Project Confirmed', '2022-10-29', '19:42:00', 'In Home', 'Industrial Style', 'Condo', 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quas minima placeat id omnis doloremque earum illum possimus tenetur dolores vel recusandae distinctio iure, facere odit quaerat doloribus laborum fuga explicabo?', 5, 3),
 (3, '2022-10-24 19:30:54', '2022-11-19 13:12:25', 'Project Confirmed', '2022-10-30', '08:20:54', 'Virtual Meeting', 'Traditional / Classic Style,Art Deco Style,Eclectic Style', 'design range updated', 'I prefer Google Meet', 5, 2),
 (4, '2022-10-24 19:30:54', '2022-10-27 17:31:05', 'Project Confirmed', '2022-10-30', '20:18:54', 'Virtual Meeting', 'Art Deco Style,Eclectic Style', 'design range updated', 'Please use Google Meet, thx', 6, 3),
-(5, '2022-10-30 19:30:54', '2023-11-20 11:24:37', 'Project Confirmed', '2022-10-30', '08:18:54', 'Virtual Meeting', 'Industrial Style,Eclectic Style', 'design range updated', '', 6, 2),
-(6, '2023-11-16 00:00:00', '2023-11-20 11:24:26', 'Project Confirmed', '2023-11-25', '16:00:00', 'Phone Call', 'Eclectic Style', 'bathroom', 'nooooo', 16, 2),
-(7, '2023-11-20 00:00:00', '2023-11-20 11:19:09', 'Project Confirmed', '2023-11-21', '11:00:00', 'In Store', ' Modern Minimalist,Industrial Style', 'test', 'additional', 19, 16),
-(12, '2023-11-20 00:00:00', '2023-11-20 11:21:07', 'Project Confirmed', '2023-11-23', '11:00:00', 'In Store', ' Traditional/Classic Style', 'dgfdg', 'dfgdf', 19, 16),
-(13, '2023-11-20 00:00:00', NULL, 'Pending', '2023-11-30', '11:00:00', 'In Store', ' English Country Style', 'I would like to visit the shop', 'To look for interior design', 19, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `feedback`
---
-
-CREATE TABLE `feedback` (
-  `feedback_id` int(10) UNSIGNED NOT NULL,
-  `feedback_date` date NOT NULL,
-  `project_id` int(10) UNSIGNED NOT NULL,
-  `cust_id` int(10) UNSIGNED NOT NULL,
-  `expectation` text NOT NULL,
-  `workAgn` text NOT NULL,
-  `compare` text NOT NULL,
-  `communication` text NOT NULL,
-  `explanation` text NOT NULL,
-  `goal` text NOT NULL,
-  `comment` text NOT NULL,
-  `comment2` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `feedback`
---
-
-INSERT INTO `feedback` (`feedback_id`, `feedback_date`, `project_id`, `cust_id`, `expectation`, `workAgn`, `compare`, `communication`, `explanation`, `goal`, `comment`, `comment2`) VALUES
-(1, '2022-10-30', 2, 5, 'expectation1', 'workAgn1', 'compare1', 'communication1', 'explanation1', 'goal1', 'comment bla', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat a repellendus, necessitatibus aut ipsa vero dolores laboriosam eos debitis ipsam. Magni, nobis. Illum sed molestias minima laborum cum quaerat ipsam!'),
-(2, '2022-11-01', 1, 6, 'expectation2', 'workAgn2', 'compare2', 'communication2', 'explanation2', 'goal2', 'comment bla', 'comment blabla'),
-(3, '2017-11-22', 1, 6, 'N/A - Dont know what to expect', 'Slightly Likel', 'Inferior', 'Disagree', 'Neutral', 'Agree', 'good service', 'In Haus has a great team, friendly relation, they designed the ideal house for my needs. It is a fantastic project, we are very happy! They were originally recommended to us by a friend and now we recommend them.'),
-(4, '2017-11-22', 1, 6, 'Did Not Meet Expectations', 'Slightly Likel', 'Equal', 'Neutral', 'Agree', 'Strongly Agree', '123', 'The entire In Haus interior design team was truly amazing to work with. The design team fully captured our vision and need for functionality and gave us our dream home! They also made the process fun and exciting along the way and we trusted them completely. They truly are the best interior designers in Miami and would recommend them 100000%!!'),
-(5, '2017-11-22', 1, 6, 'Did Not Meet Expectations', 'Slightly Likel', 'Equal', 'Neutral', 'Agree', 'Strongly Agree', '123', 'From the ﬁrst moment that we walked into the oﬃce at In Haus, the staff was AMAZING! We were greeted by a cool, hip, young interior design team that took our request to make “NOT your grandpa’s condo” and turned it into our rock and roll dream! Although we were '),
-(6, '2019-11-22', 2, 2, 'Met Expectations', 'Moderately Likely', 'Slightly Inferior', 'Disagree', 'Strongly Disagree', 'Agree', 'test', 'test');
+(5, '2022-10-30 19:30:54', '2023-11-20 22:10:02', 'Pending', '2022-10-30', '08:18:54', 'Virtual Meeting', 'Industrial Style,Eclectic Style', 'design range updated', '', 6, 2);
 
 -- --------------------------------------------------------
 
@@ -222,10 +185,7 @@ INSERT INTO `project` (`project_id`, `created_datetime`, `last_modified_datetime
 (39, '2021-10-01 00:25:23', '2021-10-16 00:25:23', '', 'Waiting for Staff to Upload Contract', 'Completed', '{\"1\":\"\",\"2\":\"\",\"3\":\"\"}', 35000, '', '', '', 6, 4, 3),
 (40, '2021-11-01 00:25:23', '2021-11-16 00:25:23', 'Surin Condo', 'Cancelled', 'Completed', '{\"1\":\"\",\"2\":\"\",\"3\":\"\"}', 35000, '', '', '', 6, 4, 3),
 (41, '2021-12-01 00:25:23', '2021-12-16 00:25:23', 'Urban Suites', 'In Progress - Designing', 'Completed', '{\"1\":\"\",\"2\":\"\",\"3\":\"\"}', 35000, '', '', '', 6, 4, 3),
-(42, '2022-11-19 13:12:25', '2022-11-19 13:12:25', '', 'Waiting for Staff to Upload Contract', 'Waiting for 1st Payment', '{\"1\":\"\",\"2\":\"\",\"3\":\"\"}', 0, '', '', '', 5, 3, 2),
-(45, '2023-11-20 11:24:26', '2023-11-20 11:24:26', '', 'Waiting for Staff to Upload Contract', 'Waiting for 1st Payment', '{\"1\":\"\",\"2\":\"\",\"3\":\"\"}', 0, '', '', '', 16, 6, 2),
-(46, '2023-11-20 11:24:31', '2023-11-20 11:24:31', '', 'Waiting for Staff to Upload Contract', 'Waiting for 1st Payment', '{\"1\":\"\",\"2\":\"\",\"3\":\"\"}', 0, '', '', '', 6, 5, 2),
-(47, '2023-11-20 11:24:37', '2023-11-20 11:24:37', '', 'Waiting for Staff to Upload Contract', 'Waiting for 1st Payment', '{\"1\":\"\",\"2\":\"\",\"3\":\"\"}', 0, '', '', '', 6, 5, 2);
+(42, '2022-11-19 13:12:25', '2022-11-19 13:12:25', '', 'Waiting for Staff to Upload Contract', 'Waiting for 1st Payment', '{\"1\":\"\",\"2\":\"\",\"3\":\"\"}', 0, '', '', '', 5, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -272,14 +232,14 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `name`, `email`, `password`, `phone_no`, `access_level`, `status`) VALUES
+(1, 'Superman', 'superman@gmail.com', '$2y$10$QqOuiHzyPYReDC4.NnurkuBQL.ZcynjwKlvlO5jKF6T.FaCO5sHXy', NULL, 'Admin', NULL),
 (2, 'Joey Cheng', 'chengxinye@gmail.com', '$2y$10$QCljfGxLgSN4WRRTxWe2tu8Nzyf/kwuD/ru6P0sLbmGhf3ExWSHVO', NULL, 'Project Leader', 'Active now'),
 (3, 'Mickey Mouse', 'mickeymouse@gmail.com', '$2y$10$O0OhespCFm0iTqJxthvZG.H9aHsfPTgUpXitwTvPmcTwG8gkuabuW', NULL, 'Project Leader', NULL),
 (4, 'Minnie Mouse', 'minniemouse@gmail.com', '$2y$10$O0OhespCFm0iTqJxthvZG.H9aHsfPTgUpXitwTvPmcTwG8gkuabuW', NULL, 'Customer Service', 'Active now'),
 (5, 'Ah Beng', 'tansinyi12@gmail.com', '$2y$10$oNfWVoVKBuXB5DenjuA3IOO0pJeuywBFpUgXNtE5tk/HuwdeBz8re', '0161234567', 'Normal User', 'Offline now'),
 (6, 'Mei Ling', 'meiling@gmail.com', '$2y$10$oNfWVoVKBuXB5DenjuA3IOO0pJeuywBFpUgXNtE5tk/HuwdeBz8re', '0161234567', 'Normal User', 'Active now'),
-(16, 'TeohS4', 'lee@supermail.com', 'Thsfhdgh', '1', 'Project Leader', 'Offline now'),
-(18, 'Teoh', 'weijieteoh26@gmail.com', '$2y$10$P.XP/xHTSKN9H.sycfcn4.TVQCXDjLhubH0H.bkRMxY8XKGVZ/j52', '0123435465', 'Project Manager', 'Active now'),
-(19, 'Weijie', 'teohs4@hotmail.com', '$2y$10$YVkkmmKiLDzEmN6.0mzRRefAseaPBXtbFVTmnSjtMkqaxHKdSdALC', '8046547', 'Normal User', 'Offline now');
+(16, 'J', 'Jowyn2002@gmail.com', '$2y$10$rDzgtQNgloBYWfTsgMZ2A.g8xGtg/kFhIfOFnLfpdIn8VhKRLcGAW', '1', 'Normal User', 'Offline now'),
+(18, 'J', 'Jowyn2002@gmail.com', '$2y$10$rDzgtQNgloBYWfTsgMZ2A.g8xGtg/kFhIfOFnLfpdIn8VhKRLcGAW', '1', 'Normal User', 'Offline now');
 
 --
 -- Indexes for dumped tables
@@ -292,14 +252,6 @@ ALTER TABLE `consultation`
   ADD PRIMARY KEY (`consultation_id`),
   ADD KEY `cust_id` (`cust_id`),
   ADD KEY `admin_id` (`admin_id`);
-
---
--- Indexes for table `feedback`
---
-ALTER TABLE `feedback`
-  ADD PRIMARY KEY (`feedback_id`),
-  ADD KEY `project_id` (`project_id`),
-  ADD KEY `cust_id` (`cust_id`) USING BTREE;
 
 --
 -- Indexes for table `log_activity`
@@ -352,13 +304,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `consultation`
 --
 ALTER TABLE `consultation`
-  MODIFY `consultation_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT for table `feedback`
---
-ALTER TABLE `feedback`
-  MODIFY `feedback_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `consultation_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `log_activity`
@@ -376,13 +322,13 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `portfolio`
 --
 ALTER TABLE `portfolio`
-  MODIFY `portfolio_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `portfolio_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `project`
 --
 ALTER TABLE `project`
-  MODIFY `project_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `project_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -394,7 +340,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables
@@ -404,22 +350,8 @@ ALTER TABLE `user`
 -- Constraints for table `consultation`
 --
 ALTER TABLE `consultation`
-  ADD CONSTRAINT `consultation_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `consultation_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`);
-
---
--- Constraints for table `feedback`
---
-ALTER TABLE `feedback`
-  ADD CONSTRAINT `feedback_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `feedback_project_id_fk` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`);
-
---
--- Constraints for table `log_activity`
---
-ALTER TABLE `log_activity`
-  ADD CONSTRAINT `fk_consultation` FOREIGN KEY (`consultation_id`) REFERENCES `consultation` (`consultation_id`),
-  ADD CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `consultation_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `consultation_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `messages`
@@ -432,9 +364,9 @@ ALTER TABLE `messages`
 -- Constraints for table `project`
 --
 ALTER TABLE `project`
-  ADD CONSTRAINT `project_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `project_consultation_id_fk` FOREIGN KEY (`consultation_id`) REFERENCES `consultation` (`consultation_id`),
-  ADD CONSTRAINT `project_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `project_admin_id_fk` FOREIGN KEY (`admin_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `project_consultation_id_fk` FOREIGN KEY (`consultation_id`) REFERENCES `consultation` (`consultation_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `project_cust_id_fk` FOREIGN KEY (`cust_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
