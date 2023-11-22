@@ -9,7 +9,7 @@ Gan Kah Xiang
 
 # InHausInteriorWebsite
 
-1. Import SQL file in phpMyAdmin
+1. Import SQL file (in_haus.sql) in phpMyAdmin
 2. paste the folder "public_html" in htdocs
 
 *******************************
